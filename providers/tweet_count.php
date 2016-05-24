@@ -10,7 +10,7 @@ $settings = array(
 );
 
 $url = 'https://api.twitter.com/1.1/users/show.json';
-$screen_name = 'designyourcode';
+$screen_name = 'your_screen_name_here';
 $getfield = '?screen_name=' . $screen_name;
 
 $requestMethod = 'GET';

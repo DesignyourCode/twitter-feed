@@ -10,7 +10,7 @@ $settings = array(
 );
  
 $url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
-$screen_name = 'designyourcode';
+$screen_name = 'your_screen_name_here';
 $limit = 3;
 $getfieldwithcount = '?screen_name=' . $screen_name . '&count=' . $limit;
 
