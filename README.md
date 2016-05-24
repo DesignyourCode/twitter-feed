@@ -6,6 +6,7 @@ Feel free to create your own and contribute them. I use these 2 often so they ar
 ## Getting the examples working
 
 All you need to do is run this is a PHP server and ensure you have added your consumer and secrets keys.
+To get consumer and secret keys (<a href="http://www.smartaddons.com/documentation/how-to-get-consumer-key-and-consumer-secret-on-twitter/" target="_blank">here</a> is an example on how to do it that I found, to save you the time of Googling it), you will need to create a Twitter App, in your <a href="https://dev.twitter.com/" target="_blank">Twitter developer account</a>.
 
 ```
 $settings = array(
