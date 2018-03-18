@@ -1,30 +1,52 @@
 $(document).ready(function(){
   
     // Tweets
-    $.ajax({
-        url: '/providers/tweets.php',
-        type: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            if (typeof response.errors === 'undefined' || response.errors.length < 1) {
-                
-                var $tweets = $('.tweets-container');
-                $.each(response, function(i, obj) {
-                    $tweets.append(
-                        '<div class="tweet">' +
-                            '<p><i class="fa fa-twitter"></i> ' + obj.text +
-                        '</div>'
-                    );
-                });
+    var $tweetContainer = $('.tweets'),
+        tweetNum = $tweetContainer.data('tweet');
 
-            } else {
-                $('.tweets-container p:first').text('Response error');
+    if( $tweetContainer.length > 0 ) {
+        $.ajax({
+            url: '/providers/tweets.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                for (var i = 0; i < tweetNum; i++) {
+                    try {
+                        var tweet = response[i],
+                            tweetImage = '';
+
+                        if (tweet.quoted_status !== undefined) {
+                            var imageUrl = tweet.quoted_status.extended_entities.media[0].media_url;
+
+                            if (imageUrl !== undefined && imageUrl !== '') {
+                                tweetImage = '<img class="twitter-img" src="'+imageUrl+'">';
+                            }
+                        }
+
+                        var urlregexp = new RegExp("((http|https)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,5}(:[a-zA-Z0-9]*)?/?(([a-zA-Z0-9\-_\?\'/\\\+&amp;%\$#\=~]|[\,\.](?! )))*)");
+                        $tweetContainer.append(
+                            '<p>'+
+                                '<span class="tweet-content">'+
+                                    '<span class="twitter-avatar">'+
+                                        '<img class="avatar" src="'+tweet.user.profile_image_url+'">'+
+                                    '</span>'+
+                                    '<span class="icon icon--twitter" aria-label="View on Twitter" title="View on Twitter" role="presentation"></span>'+
+                                    '<a href="https://twitter.com/'+tweet.user.screen_name+'" target="_blank" class="twitter-identity">'+
+                                        '<span class="twitter-name">'+tweet.user.name+'</span>'+
+                                        '<span class="twitter-screen-name">@'+tweet.user.screen_name+'</span>'+
+                                    '</a>'+
+                                    tweet.text.replace(urlregexp, '<a href="$1" target="_blank"><nobr>$1</nobr></a>') + tweetImage +
+                                '</span>'+
+                            '</p>'
+                        );
+                    } catch (e) {}
+                }
+            },
+            error: function(errors) {
+                $tweetContainer.find('p:first').text('Request error');
             }
-        },
-        error: function(errors) {
-            $('.tweets-container p:first').text('Request error');
-        }
-    });
+        });
+    }
 
     // Tweet Count
     $.ajax({
